@@ -5,7 +5,7 @@ import {Table, Button,Row,Col} from 'react-bootstrap'
 import {useDispatch, useSelector} from 'react-redux'
 import Message from "../components/Message"
 import Loader from "../components/Loader"
-import { listProducts,deleteProduct,createProduct } from '../actions/productActions'
+import { listProducts,deleteProduct,createProduct,sellerProducts } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 import Paginate from '../components/Paginate'
 
@@ -22,7 +22,8 @@ const ProductListScreen = () => {
   const productDelete=useSelector(state=>state.productDelete)
   const {loading:loadingDelete,error:errorDelete,success:successDelete}=productDelete
 
-  
+  const sellerProducts=useSelector(state=>state.sellerProducts)
+  const {products:sellerCreatedProducts}=sellerProducts
 
   const productCreate=useSelector(state=>state.productCreate)
   const {loading:loadingCreate,error:errorCreate,success:successCreate,product:createdProduct}=productCreate
@@ -32,12 +33,18 @@ const ProductListScreen = () => {
 
   useEffect(()=>{
     dispatch({type: PRODUCT_CREATE_RESET})
-    if(!userInfo.isAdmin ){
+    if(!userInfo.isAdmin && !userInfo.isSeller){
       navigate('/login')
     }
-    if(successCreate){
+   
+    if(successCreate ){
       navigate(`/admin/product/${createdProduct._id}/edit`)
     }else{
+      // if(userInfo.isSeller){
+      //   dispatch(sellerProducts)
+      // }else{
+      //    dispatch(listProducts('',pageNumber))
+      // }
       dispatch(listProducts('',pageNumber))
     }
   },[dispatch,userInfo,navigate,successDelete,successCreate,createdProduct,pageNumber])
@@ -103,6 +110,8 @@ const ProductListScreen = () => {
 
               </tr>
             ))}
+
+            
           </tbody>
         </Table>
         <Paginate pages={pages} page={page} isAdmin={true}/>

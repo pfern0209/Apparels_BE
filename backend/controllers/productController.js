@@ -1,5 +1,7 @@
 import Product from "../models/productModel.js";
+import User from "../models/userModel.js";
 import asyncHandler from 'express-async-handler'
+
 
 //@desc Fetches all products
 //@route GET /api/products
@@ -144,4 +146,13 @@ const getTopProducts=asyncHandler(async(req,res)=>{
   res.json(products)
 })
 
-export {getProductById,getProducts,deleteProduct,createProduct,updateProduct,createProductReview,getTopProducts}
+//@desc Get products created by seller
+//@route GET /api/products/user/:id
+//@access Private seller
+
+const getSellerCreatedProducts=asyncHandler(async(req,res)=>{
+  const sellerProducts= await Product.find({"user":[req.params.id]})
+  res.json(sellerProducts)
+})
+
+export {getProductById,getProducts,deleteProduct,createProduct,updateProduct,createProductReview,getTopProducts,getSellerCreatedProducts}

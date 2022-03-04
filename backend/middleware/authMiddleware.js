@@ -45,5 +45,14 @@ const sellerOrAdmin=(req,res,next)=>{
   }
 }
 
+const seller=(req,res,next)=>{
+  if(req.user && req.user.isSeller){
+    next();
+  }else{
+    res.status(401);
+    throw new Error("You are either not a seller or admin");
+  }
+}
+
 // export {protect,admin}
-export {protect,admin,sellerOrAdmin}
+export {protect,admin,sellerOrAdmin,seller}
