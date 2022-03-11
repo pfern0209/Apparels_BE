@@ -11,6 +11,32 @@ import Message from "../components/Message"
 import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstants"
 import { PayPalButton } from "react-paypal-button-v2";
 
+useEffect(() => {
+    const addPayPalScript=async()=>{
+        if(!userInfo){
+          navigate('/login')
+        }
+
+        const {data:clientId}=await axios.get('/api/config/paypal')
+        const script=document.createElement('script')
+        script.type='text/javascript'
+        script.src=`https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD`
+        script.async=true
+        script.onload=()=>{
+          setSdkReady(true)
+        }
+        document.body.appendChild(script)
+      }
+    
+    
+      if(!window.paypal){
+        addPayPalScript()
+      }else{
+        setSdkReady(true)
+      }
+    
+}, [userInfo])
+
 const addToCartHandler=(e)=>{
     console.log("Hello")
   } 
@@ -35,7 +61,7 @@ const PaySellerScreen = () => {
           </ListGroup.Item>
 
           <ListGroup.Item>
-            <Rating value="5" text="2 Reviews"/>
+            <Rating value="5" text="4 Reviews"/>
           </ListGroup.Item>
 
           <ListGroup.Item>
@@ -99,7 +125,19 @@ const PaySellerScreen = () => {
                 <Rating value="5"/>
                 <p>02 January 2022</p>
                 <p>Amazing functionality</p>
-              </ListGroup.Item>                        
+              </ListGroup.Item>  
+              <ListGroup.Item key="3">
+                <strong>Joston Fernandes</strong>
+                <Rating value="5"/>
+                <p>03 January 2022</p>
+                <p>Easy to use</p>
+              </ListGroup.Item>     
+              <ListGroup.Item key="4">
+                <strong>Yash Gupta</strong>
+                <Rating value="5"/>
+                <p>04 January 2022</p>
+                <p>Friendly User Interface</p>
+              </ListGroup.Item>                           
           </ListGroup>
         </Col>
       </Row>
