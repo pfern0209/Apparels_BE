@@ -1,63 +1,63 @@
-import {  useEffect } from 'react'
+import React from 'react'
+import { useEffect } from "react"
+import {useDispatch,useSelector} from "react-redux"
+
 import {useNavigate,useParams} from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import {Table, Button,Row,Col} from 'react-bootstrap'
-import {useDispatch, useSelector} from 'react-redux'
 import Message from "../components/Message"
 import Loader from "../components/Loader"
 import { listProducts,deleteProduct,createProduct,sellerProducts } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
-import Paginate from '../components/Paginate'
 
-const ProductListScreen = () => {
-  const params=useParams()
+const SellerProductListScreen = () => {
+  
+    const params=useParams()
   const dispatch=useDispatch()
   const navigate=useNavigate()
-  const pageNumber=params.pageNumber||1
   
 
-  const productList=useSelector(state=>state.productList)
-  const {loading,error,products,pages,page}=productList
+//   const productList=useSelector(state=>state.productList)
+//   const {loading,error,products,pages,page}=productList
 
   const productDelete=useSelector(state=>state.productDelete)
   const {loading:loadingDelete,error:errorDelete,success:successDelete}=productDelete
 
-  const sellerProducts=useSelector(state=>state.sellerProducts)
-  const {products:sellerCreatedProducts}=sellerProducts
 
   const productCreate=useSelector(state=>state.productCreate)
   const {loading:loadingCreate,error:errorCreate,success:successCreate,product:createdProduct}=productCreate
 
+  
+
   const userLogin=useSelector(state=>state.userLogin)
   const {userInfo}=userLogin
 
+  const tempProducts=useSelector(state=>state.sellerProducts)
+  const {sellerCreatedProducts:products,loading,error}=tempProducts  
+  
+
   useEffect(()=>{
-    dispatch({type: PRODUCT_CREATE_RESET})
-    if(!userInfo.isAdmin && !userInfo.isSeller){
-      navigate('/login')
+    if(!userInfo.isSeller){
+        navigate('/login')   
     }
-   
     if(successCreate ){
-      navigate(`/admin/product/${createdProduct._id}/edit`)
-    }else{
-      if(userInfo.isSeller){
-        navigate('/seller/productlist')
+        navigate(`/admin/product/${createdProduct._id}/edit`)
       }else{
-         dispatch(listProducts('',pageNumber))
-      }
+        dispatch(sellerProducts(userInfo._id))
     }
-  },[dispatch,userInfo,navigate,successDelete,successCreate,createdProduct,pageNumber])
+
+  },[userInfo,navigate,dispatch,successCreate])
+
+
+
+  
 
   const createProductHandler=(product)=>{
     dispatch(createProduct())
   }
 
-  const deleteHandler=(id)=>{
-    if(window.confirm("Are you sure")){
-      dispatch(deleteProduct(id))
-    }
-  }
-
+  
+console.log(products)
   return (
     <>
       <Row className='align-items-center'>
@@ -88,6 +88,7 @@ const ProductListScreen = () => {
             </tr>
           </thead>
           <tbody>
+          {products && <>
             {products.map(product=>(
               <tr key={product._id}>
                 <td>{product._id}</td>
@@ -102,22 +103,19 @@ const ProductListScreen = () => {
                       <i className='fas fa-edit'></i>
                     </Button>
                   </LinkContainer>
-                  <Button variant='danger' className='btn-sm' onClick={()=>deleteHandler(product._id)}>
-                      <i className='fas fa-trash'></i>
-                    </Button>
                 </td>
 
               </tr>
             ))}
-
+          
+          </>}
             
           </tbody>
         </Table>
-        <Paginate pages={pages} page={page} isAdmin={true}/>
         </>
       )}
     </>
   )
 }
 
-export default ProductListScreen
+export default SellerProductListScreen

@@ -219,7 +219,6 @@ export const sellerProducts=(id)=>async(dispatch,getState)=>{
     const { data } = await axios.get(
       `/api/products/user/${id}`,config
     )
-    console.log(data)
     dispatch({
       type:SELLER_PRODUCTS_SUCCESS,
       payload:data

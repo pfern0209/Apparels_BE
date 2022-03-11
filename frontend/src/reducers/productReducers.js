@@ -107,9 +107,9 @@ export const productTopRatedReducer=(state={ products:[] },action)=>{
 export const sellerProductsReducer=(state = { sellerProducts: [] }, action)=>{
   switch(action.type){
     case SELLER_PRODUCTS_REQUEST:
-      return {loading:true,sellerProducts:[]}
+      return {loading:true}
     case SELLER_PRODUCTS_SUCCESS:
-      return {loading:false,sellerProducts:action.payload}
+      return {loading:false,sellerCreatedProducts:action.payload}
     case SELLER_PRODUCTS_FAIL:
       return {loading:false,error:action.payload}  
     default:

@@ -17,6 +17,7 @@ import UserEditScreen from './screens/UserEditScreen';
 import ProductListScreen from './screens/ProductListScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
+import SellerProductListScreen from './screens/SellerProductListScreen';
 
 
 
@@ -72,6 +73,13 @@ const App= () => {
         <Route path="/profile" element={
           <>
             <ProfileScreen/>
+          </>
+        }>  
+        </Route>
+
+        <Route path="/seller/productlist" element={
+          <>
+            <SellerProductListScreen/>
           </>
         }>  
         </Route>

@@ -7,7 +7,7 @@ import Message from "../components/Message"
 import Loader from "../components/Loader"
 import { listProductDetails,updateProduct } from '../actions/productActions'
 import FormContainer from '../components/FormContainer'
-import { PRODUCT_UPDATE_RESET, PRODUCT_DETAILS_RESET } from '../constants/productConstants'
+import { PRODUCT_UPDATE_RESET, PRODUCT_DETAILS_RESET,PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 
 const ProductEditScreen = () => {
@@ -33,6 +33,9 @@ const ProductEditScreen = () => {
   const productDetails=useSelector(state=>state.productDetails)
   const {loading,error,product}=productDetails
 
+  const userLogin=useSelector(state=>state.userLogin)
+  const {userInfo}=userLogin
+
   const productUpdate=useSelector(state=>state.productUpdate)
   const {loading:loadingUpdate,error:errorUpdate,success:successUpdate}=productUpdate
 
@@ -43,7 +46,12 @@ const ProductEditScreen = () => {
     if(successUpdate){
       dispatch({ type: PRODUCT_UPDATE_RESET })
       dispatch({type: PRODUCT_DETAILS_RESET})
-      navigate('/admin/productlist')
+      if(userInfo.isSeller){
+        navigate('/seller/productlist')
+      }else{
+        navigate('/admin/productlist')
+      }
+      dispatch({ type: PRODUCT_CREATE_RESET })
     }else{
       if(!product.name || product._id!==productId){
       dispatch(listProductDetails(productId))
@@ -57,7 +65,7 @@ const ProductEditScreen = () => {
       setDescription(product.description)
     }
     }
-  },[product,productId,dispatch,navigate,successUpdate])
+  },[product,productId,dispatch,navigate,successUpdate,userInfo])
 
   const uploadFileHandler=async(e)=>{
     const file=e.target.files[0];
