@@ -63,7 +63,13 @@ const Header = () => {
             </NavDropdown>
           )}  
 
-                 
+          {userInfo && (!userInfo.isSeller && !userInfo.isAdmin) && (
+            <LinkContainer to="/paySeller">
+            <Nav.Link>Buy Plan</Nav.Link>
+          </LinkContainer>
+          )}  
+        
+        
           </Nav>
         </Navbar.Collapse>
       </Container>

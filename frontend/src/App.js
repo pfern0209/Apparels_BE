@@ -18,6 +18,7 @@ import ProductListScreen from './screens/ProductListScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import SellerProductListScreen from './screens/SellerProductListScreen';
+import PaySellerScreen from './screens/PaySellerScreen';
 
 
 
@@ -52,6 +53,13 @@ const App= () => {
         <Route path="/placeorder" element={
           <>
             <PlaceOrderScreen/>
+          </>
+        }>  
+        </Route>
+
+        <Route exact path="/paySeller" element={
+          <>
+            <PaySellerScreen/>
           </>
         }>  
         </Route>
