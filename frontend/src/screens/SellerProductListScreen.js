@@ -35,13 +35,7 @@ const SellerProductListScreen = () => {
   const tempProducts=useSelector(state=>state.sellerProducts)
   const {sellerCreatedProducts:products,loading,error}=tempProducts  
  
-  let count=0
-//   products.forEach(function (item) {
-//    count=count+item.countInStock 
-// });
-
-//   let upperLimit=userInfo.maxProducts-count
-  let upperLimit=0
+ 
 
   useEffect(()=>{
     if(!userInfo.isSeller){
@@ -55,7 +49,9 @@ const SellerProductListScreen = () => {
 
   },[userInfo,navigate,dispatch,successCreate])
 
+ 
 
+  let upperLimit=userInfo.maxProducts-userInfo.productsAdded
 
   
 
@@ -73,7 +69,7 @@ console.log(products)
         </Col>
         <Col className='d-flex justify-content-end'>
       
-          <Button className='my-3' disabled={upperLimit===0} onClick={createProductHandler}> 
+          <Button className='my-3' disabled={upperLimit<=0} onClick={createProductHandler}> 
             <i className='fas fa-plus'></i> Create Product
           </Button>
         </Col>

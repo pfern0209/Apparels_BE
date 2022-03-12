@@ -72,19 +72,62 @@ const createProduct=asyncHandler(async(req,res)=>{
 })
 
 
+// //@desc Update a product
+// //@route PUT /api/products/:id
+// //@access Private Admin
+// const updateProduct=asyncHandler(async(req,res)=>{
+//   const {name,price,description,image,brand,category,countInStock}=req.body;
+//   const product =await Product.findById(req.params.id)
+//   const user=await User.findById(req.user._id)
+//   let userFieldUpdated=User.findById(req.user._id)
+//   let sellerProductsCount=0
+//   const sellerProducts= await Product.find({"user":[req.user._id]})
+//   let tempTotalCreated=0
+//   if(sellerProducts.length!==0){
+//     sellerProducts.forEach(function (item) {
+//       sellerProductsCount=sellerProductsCount+item.countInStock 
+//    });
+//      tempTotalCreated=sellerProductsCount+countInStock
+//   }
+ 
+  
+//   // if(product && (tempTotalCreated<user.maxProducts)){
+//     if(product){
+//     product.name=name
+//     product.price=price
+//     product.description=description
+//     product.image=image
+//     product.brand=brand
+//     product.category=category
+//     product.countInStock=countInStock
+//     const updatedProduct=await product.save();
+      
+//       if(sellerProducts.length!==0){
+//         user.productsAdded=tempTotalCreated+countInStock
+//         userFieldUpdated=await user.save()
+//       }else{
+//         user.productsAdded=countInStock
+//        userFieldUpdated=await user.save()
+//       }  
+//       res.json(updatedProduct)
+    
+//   }else{
+//     res.status(404)
+//     throw new Error("Product not found")
+//   }
+
+// })
+
 //@desc Update a product
 //@route PUT /api/products/:id
 //@access Private Admin
 const updateProduct=asyncHandler(async(req,res)=>{
   const {name,price,description,image,brand,category,countInStock}=req.body;
-  
-  
 
   const product =await Product.findById(req.params.id)
-  const user=await User.findById(req.user._id)
-  let userFieldUpdated=User.findById(req.user._id)
 
   if(product){
+
     product.name=name
     product.price=price
     product.description=description
@@ -92,17 +135,8 @@ const updateProduct=asyncHandler(async(req,res)=>{
     product.brand=brand
     product.category=category
     product.countInStock=countInStock
+
     const updatedProduct=await product.save();
-    if(user){
-      const sellerProducts= await Product.find({"user":[req.user._id]})
-      if(sellerProducts.length!==0){
-        user.productsAdded=sellerProducts.length+countInStock
-        userFieldUpdated=await user.save()
-      }else{
-        user.productsAdded=countInStock
-       userFieldUpdated=await user.save()
-      }  
-    }
     res.json(updatedProduct)
   }else{
     res.status(404)
@@ -171,9 +205,20 @@ const getSellerCreatedProducts=asyncHandler(async(req,res)=>{
 //@access Private seller
 
 const getProductsAddedNumber=asyncHandler(async(req,res)=>{
-  const sellerProducts= await Product.find({"user":[req.user._id]})
-  // const user=await User.findById(req.user._id)
-  res.json(sellerProducts.length)
+  const sellerProducts= await Product.find({"user":[req.params.id]})
+  const user=await User.findById(req.params.id)
+
+  if(sellerProducts && user){
+    let sellerProductsCount=0
+    sellerProducts.forEach(function (item) {
+      sellerProductsCount=sellerProductsCount+item.countInStock 
+   });
+    user.productsAdded=sellerProductsCount
+    const updatedUser=await user.save();
+    res.json(updatedUser)
+  }else{
+    throw new Error("nothing found")
+  }
 })
 
 

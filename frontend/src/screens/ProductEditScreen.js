@@ -5,9 +5,10 @@ import {Form, Button} from 'react-bootstrap'
 import {useDispatch, useSelector} from 'react-redux'
 import Message from "../components/Message"
 import Loader from "../components/Loader"
-import { listProductDetails,updateProduct } from '../actions/productActions'
+import { listProductDetails,updateProduct,sellerProfileUpdate } from '../actions/productActions'
 import FormContainer from '../components/FormContainer'
 import { PRODUCT_UPDATE_RESET, PRODUCT_DETAILS_RESET,PRODUCT_CREATE_RESET } from '../constants/productConstants'
+import { USER_LOGOUT } from '../constants/userConstants'
 
 
 const ProductEditScreen = () => {
@@ -42,13 +43,10 @@ const ProductEditScreen = () => {
   const tempProducts=useSelector(state=>state.sellerProducts)
   const {sellerCreatedProducts:products}=tempProducts
   
-  let sellerProductsCount=0;
+  
+  
 
-  products.forEach(function (item) {
-   sellerProductsCount=sellerProductsCount+item.countInStock 
-});
-
-  let upperLimit=userInfo.maxProducts-sellerProductsCount
+  let upperLimit=userInfo.maxProducts-userInfo.productsAdded
 
   
 
@@ -57,11 +55,16 @@ const ProductEditScreen = () => {
     if(successUpdate){
       dispatch({ type: PRODUCT_UPDATE_RESET })
       dispatch({type: PRODUCT_DETAILS_RESET})
-      if(userInfo.isSeller){
-        navigate('/seller/productlist')
-      }else{
-        navigate('/admin/productlist')
-      }
+      dispatch({type: PRODUCT_DETAILS_RESET}) 
+      dispatch(sellerProfileUpdate(userInfo._id))
+      dispatch({type: USER_LOGOUT})
+      navigate('/')
+      
+      // if(userInfo.isSeller){
+      //   navigate('/seller/productlist')
+      // }else{
+      //   navigate('/admin/productlist')
+      // }
       dispatch({ type: PRODUCT_CREATE_RESET })
     }else{
       if(!product.name || product._id!==productId){

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS,PRODUCT_LIST_FAIL, PRODUCT_DETAILS_REQUEST, PRODUCT_DETAILS_SUCCESS, PRODUCT_DETAILS_FAIL, PRODUCT_DELETE_REQUEST, PRODUCT_DELETE_SUCCESS, PRODUCT_DELETE_FAIL,  PRODUCT_CREATE_REQUEST, PRODUCT_CREATE_SUCCESS, PRODUCT_CREATE_FAIL, PRODUCT_UPDATE_REQUEST, PRODUCT_UPDATE_SUCCESS, PRODUCT_UPDATE_FAIL,  PRODUCT_CREATE_REVIEW_REQUEST,PRODUCT_CREATE_REVIEW_SUCCESS,PRODUCT_CREATE_REVIEW_FAIL, PRODUCT_TOP_REQUEST, PRODUCT_TOP_SUCCESS, PRODUCT_TOP_FAIL,SELLER_PRODUCTS_FAIL,SELLER_PRODUCTS_REQUEST,SELLER_PRODUCTS_SUCCESS} from "../constants/productConstants"
+import { PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS,PRODUCT_LIST_FAIL, PRODUCT_DETAILS_REQUEST, PRODUCT_DETAILS_SUCCESS, PRODUCT_DETAILS_FAIL, PRODUCT_DELETE_REQUEST, PRODUCT_DELETE_SUCCESS, PRODUCT_DELETE_FAIL,  PRODUCT_CREATE_REQUEST, PRODUCT_CREATE_SUCCESS, PRODUCT_CREATE_FAIL, PRODUCT_UPDATE_REQUEST, PRODUCT_UPDATE_SUCCESS, PRODUCT_UPDATE_FAIL,  PRODUCT_CREATE_REVIEW_REQUEST,PRODUCT_CREATE_REVIEW_SUCCESS,PRODUCT_CREATE_REVIEW_FAIL, PRODUCT_TOP_REQUEST, PRODUCT_TOP_SUCCESS, PRODUCT_TOP_FAIL,SELLER_PRODUCTS_FAIL,SELLER_PRODUCTS_REQUEST,SELLER_PRODUCTS_SUCCESS,SELLER_PRODUCTS_ADDED_REQUEST,SELLER_PRODUCTS_ADDED_SUCCESS,SELLER_PRODUCTS_ADDED_FAIL} from "../constants/productConstants"
 
 export const listProducts=(keyword='',pageNumber='')=>async(dispatch)=>{
   try {
@@ -226,6 +226,36 @@ export const sellerProducts=(id)=>async(dispatch,getState)=>{
   } catch (error) {
     dispatch({
       type:SELLER_PRODUCTS_FAIL,
+      payload:error.response && error.response.data.message?error.response.data.message:error.message
+    })
+  }
+}
+
+
+export const sellerProfileUpdate=(id)=>async(dispatch,getState)=>{
+  try {
+    dispatch({type:SELLER_PRODUCTS_ADDED_REQUEST})
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    const { data } = await axios.get(
+      `/api/products/user/${id}/length`,config
+    )
+    dispatch({
+      type:SELLER_PRODUCTS_ADDED_SUCCESS,
+      payload:data
+    })
+  } catch (error) {
+    dispatch({
+      type:SELLER_PRODUCTS_ADDED_FAIL,
       payload:error.response && error.response.data.message?error.response.data.message:error.message
     })
   }
