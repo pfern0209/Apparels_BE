@@ -10,49 +10,24 @@ import Loader from "../components/Loader"
 import Message from "../components/Message"
 import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstants"
 import { PayPalButton } from "react-paypal-button-v2";
+import imagePath from '../images/Subscription.png'
 
-useEffect(() => {
-    const addPayPalScript=async()=>{
-        if(!userInfo){
-          navigate('/login')
-        }
 
-        const {data:clientId}=await axios.get('/api/config/paypal')
-        const script=document.createElement('script')
-        script.type='text/javascript'
-        script.src=`https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD`
-        script.async=true
-        script.onload=()=>{
-          setSdkReady(true)
-        }
-        document.body.appendChild(script)
-      }
-    
-    
-      if(!window.paypal){
-        addPayPalScript()
-      }else{
-        setSdkReady(true)
-      }
-    
-}, [userInfo])
 
-const addToCartHandler=(e)=>{
-    console.log("Hello")
-  } 
+const PaySellerScreen = () => {
 
   const successPaymentHandler=(e)=>{
     console.log("Hello")
   }
 
-const PaySellerScreen = () => {
   return (
     <>
       <Link className="btn btn-light my-3" to="/">Go Back</Link>
         <>
         <Row>
       <Col md={6}>
-        <Image src="https://blog.hotmart.com/blog/2020/07/blog_assinatura_imagem-670x419-1.png" alt="Image" fluid/>
+        {/* <Image src="https://blog.hotmart.com/blog/2020/07/blog_assinatura_imagem-670x419-1.png" alt="Image" fluid/> */}
+        <Image src={imagePath} alt="Image" fluid/>
       </Col>
       <Col md={3}>
         <ListGroup variant="flush">
