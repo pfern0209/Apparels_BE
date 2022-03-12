@@ -17,6 +17,8 @@ const UserEditScreen = () => {
   const[email,setEmail]=useState('')
   const[isAdmin,setIsAdmin]=useState(false)
   const[isSeller,setIsSeller]=useState(false)
+  const[maxProducts,setMaxProducts]=useState(0)
+  const[productsAdded,setProductsAdded]=useState(0)
 
   // const location = useLocation();
   const navigate=useNavigate();
@@ -43,6 +45,8 @@ const UserEditScreen = () => {
       setEmail(user.email)
       setIsAdmin(user.isAdmin)
       setIsSeller(user.isSeller)
+      setMaxProducts(user.maxProducts)
+      setProductsAdded(user.productsAdded)
     }
     }
     
@@ -56,7 +60,9 @@ const UserEditScreen = () => {
       name,
       email,
       isAdmin,
-      isSeller
+      isSeller,
+      maxProducts,
+      productsAdded
     }))
     
   }
@@ -80,6 +86,16 @@ const UserEditScreen = () => {
         <Form.Group controlId="email">
           <Form.Label>Email Address</Form.Label>
           <Form.Control type='email' placeholder="Enter email" value={email} onChange={(e)=>setEmail(e.target.value)}></Form.Control>
+        </Form.Group>
+
+        <Form.Group controlId="maxProducts">
+          <Form.Label>Max Products</Form.Label>
+          <Form.Control type='number' placeholder="Enter max products seller can add" value={maxProducts} onChange={(e)=>setMaxProducts(e.target.value)}></Form.Control>
+        </Form.Group>
+
+        <Form.Group controlId="productsAdded">
+          <Form.Label>Products Added</Form.Label>
+          <Form.Control type='number' placeholder="Edit no. of products added" value={productsAdded} onChange={(e)=>setProductsAdded(e.target.value)}></Form.Control>
         </Form.Group>
 
         <Form.Group controlId="isadmin">
