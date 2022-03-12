@@ -14,6 +14,8 @@ router.get('/top',getTopProducts)
 router.get('/user/:id',getSellerCreatedProducts)
 
 // router.route('/:id').get(getProductById).delete(protect,admin,deleteProduct).put(protect,admin,updateProduct)
+// router.route('/:id').get(getProductById).delete(protect,admin,deleteProduct).put(protect,sellerOrAdmin,updateProduct)
 router.route('/:id').get(getProductById).delete(protect,admin,deleteProduct).put(protect,sellerOrAdmin,updateProduct)
 // router.route('/:id').get(getProductById).delete(protect,sellerOrAdmin,deleteProduct).put(protect,sellerOrAdmin,updateProduct)
+
 export default router

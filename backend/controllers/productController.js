@@ -88,7 +88,6 @@ const updateProduct=asyncHandler(async(req,res)=>{
     product.brand=brand
     product.category=category
     product.countInStock=countInStock
-
     const updatedProduct=await product.save();
     res.json(updatedProduct)
   }else{
@@ -149,6 +148,15 @@ const getTopProducts=asyncHandler(async(req,res)=>{
 //@access Private seller
 
 const getSellerCreatedProducts=asyncHandler(async(req,res)=>{
+  const sellerProducts= await Product.find({"user":[req.params.id]})
+  res.json(sellerProducts)
+})
+
+//@desc Get number of products created by seller
+//@route GET /api/products/user/:id
+//@access Private seller
+
+const getProductsAddedNumber=asyncHandler(async(req,res)=>{
   const sellerProducts= await Product.find({"user":[req.params.id]})
   res.json(sellerProducts)
 })

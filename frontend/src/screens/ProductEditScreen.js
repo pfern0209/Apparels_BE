@@ -67,6 +67,8 @@ const ProductEditScreen = () => {
     }
   },[product,productId,dispatch,navigate,successUpdate,userInfo])
 
+  const userId=userInfo._id
+
   const uploadFileHandler=async(e)=>{
     const file=e.target.files[0];
     const formData= new FormData()

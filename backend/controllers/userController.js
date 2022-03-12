@@ -17,6 +17,8 @@ const authUser=asyncHandler(async(req,res)=>{
       email:user.email,
       isAdmin:user.isAdmin,
       isSeller:user.isSeller,
+      maxProducts:user.maxProducts,
+      productsAdded:user.productsAdded,
       token: generateToken(user._id)
     })
   }else{
@@ -50,6 +52,8 @@ const registerUser=asyncHandler(async(req,res)=>{
       email:user.email,
       isAdmin:user.isAdmin,
       isSeller:user.isSeller,
+      maxProducts:user.maxProducts,
+      productsAdded:user.productsAdded,
       token: generateToken(user._id)
     })
   }else{
@@ -70,7 +74,11 @@ const getUserProfile=asyncHandler(async(req,res)=>{
       name:user.name,
       email:user.email,
       isAdmin:user.isAdmin,
-      isSeller:user.isSeller
+      isSeller:user.isSeller,
+      maxProducts:user.maxProducts,
+      productsAdded:user.productsAdded
+
+
     })
   }else{
     res.status(404)
@@ -87,6 +95,9 @@ const updateUserProfile=asyncHandler(async(req,res)=>{
   if(user){
     user.name=req.body.name ||user.name
     user.email=req.body.email ||user.email
+    
+    // user.maxProducts=req.body.maxProducts ||maxProducts
+    // user.productsAdded=req.body.productsAdded|| productsAdded
     if(req.body.password){
       user.password=req.body.password
     }
@@ -98,6 +109,8 @@ const updateUserProfile=asyncHandler(async(req,res)=>{
       email:updatedUser.email,
       isAdmin:updatedUser.isAdmin,
       isSeller:updatedUser.isSeller,
+      // maxProducts:user.maxProducts,
+      // productsAdded:user.productsAdded,
       token: generateToken(updatedUser._id)
     })
 
@@ -155,7 +168,8 @@ const updateUser=asyncHandler(async(req,res)=>{
   if(user){
     user.name=req.body.name ||user.name
     user.email=req.body.email ||user.email
-    
+    user.maxProducts=req.body.maxProducts ?? maxProducts
+    user.productsAdded=req.body.productsAdded ?? productsAdded
     user.isAdmin = req.body.isAdmin ?? user.isAdmin
 //Added seller toggle
     user.isSeller=req.body.isSeller ?? user.isSeller
@@ -167,7 +181,9 @@ const updateUser=asyncHandler(async(req,res)=>{
       name:updatedUser.name,
       email:updatedUser.email,
       isAdmin:updatedUser.isAdmin,
-      isSeller:updatedUser.isSeller
+      isSeller:updatedUser.isSeller,
+      maxProducts:user.maxProducts,
+      productsAdded:user.productsAdded,
     })
 
   }else{
