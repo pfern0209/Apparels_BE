@@ -77,8 +77,12 @@ const createProduct=asyncHandler(async(req,res)=>{
 //@access Private Admin
 const updateProduct=asyncHandler(async(req,res)=>{
   const {name,price,description,image,brand,category,countInStock}=req.body;
+  
+  
 
   const product =await Product.findById(req.params.id)
+  const user=await User.findById(req.user._id)
+  let userFieldUpdated=User.findById(req.user._id)
 
   if(product){
     product.name=name
@@ -89,6 +93,16 @@ const updateProduct=asyncHandler(async(req,res)=>{
     product.category=category
     product.countInStock=countInStock
     const updatedProduct=await product.save();
+    if(user){
+      const sellerProducts= await Product.find({"user":[req.user._id]})
+      if(sellerProducts.length!==0){
+        user.productsAdded=sellerProducts.length+countInStock
+        userFieldUpdated=await user.save()
+      }else{
+        user.productsAdded=countInStock
+       userFieldUpdated=await user.save()
+      }  
+    }
     res.json(updatedProduct)
   }else{
     res.status(404)
@@ -152,13 +166,16 @@ const getSellerCreatedProducts=asyncHandler(async(req,res)=>{
   res.json(sellerProducts)
 })
 
-//@desc Get number of products created by seller
-//@route GET /api/products/user/:id
+//@desc Get number of products that seller created
+//@route GET /api/products/user/:id/length
 //@access Private seller
 
 const getProductsAddedNumber=asyncHandler(async(req,res)=>{
-  const sellerProducts= await Product.find({"user":[req.params.id]})
-  res.json(sellerProducts)
+  const sellerProducts= await Product.find({"user":[req.user._id]})
+  // const user=await User.findById(req.user._id)
+  res.json(sellerProducts.length)
 })
 
-export {getProductById,getProducts,deleteProduct,createProduct,updateProduct,createProductReview,getTopProducts,getSellerCreatedProducts}
+
+
+export {getProductById,getProducts,deleteProduct,createProduct,updateProduct,createProductReview,getTopProducts,getSellerCreatedProducts,getProductsAddedNumber}

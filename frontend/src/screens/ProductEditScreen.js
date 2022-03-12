@@ -39,6 +39,17 @@ const ProductEditScreen = () => {
   const productUpdate=useSelector(state=>state.productUpdate)
   const {loading:loadingUpdate,error:errorUpdate,success:successUpdate}=productUpdate
 
+  const tempProducts=useSelector(state=>state.sellerProducts)
+  const {sellerCreatedProducts:products}=tempProducts
+  
+  let sellerProductsCount=0;
+
+  products.forEach(function (item) {
+   sellerProductsCount=sellerProductsCount+item.countInStock 
+});
+
+  let upperLimit=userInfo.maxProducts-sellerProductsCount
+
   
 
 
@@ -160,10 +171,20 @@ const ProductEditScreen = () => {
           <Form.Control type='text' placeholder="Enter category" value={category} onChange={(e)=>setCategory(e.target.value)}></Form.Control>
         </Form.Group>
 
+        {!userInfo.isAdmin ?
         <Form.Group controlId="countInStock">
+        <Form.Label>Count In Stock</Form.Label>
+        <Form.Control type='number' placeholder="Enter count in stock" max={upperLimit} value={countInStock} onChange={(e)=>setCountInStock(e.target.value)}></Form.Control>
+        </Form.Group>:
+        <Form.Group controlId="countInStock">
+        <Form.Label>Count In Stock</Form.Label>
+        <Form.Control type='number' placeholder="Enter count in stock" value={countInStock} onChange={(e)=>setCountInStock(e.target.value)}></Form.Control>
+      </Form.Group>
+        }
+        {/* <Form.Group controlId="countInStock">
           <Form.Label>Count In Stock</Form.Label>
-          <Form.Control type='text' placeholder="Enter count in stock" value={countInStock} onChange={(e)=>setCountInStock(e.target.value)}></Form.Control>
-        </Form.Group>
+          <Form.Control type='number' placeholder="Enter count in stock" max={upperLimit} value={countInStock} onChange={(e)=>setCountInStock(e.target.value)}></Form.Control>
+        </Form.Group> */}
 
         <Form.Group controlId="description">
           <Form.Label>Description</Form.Label>
