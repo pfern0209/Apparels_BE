@@ -97,10 +97,8 @@ const updateOrderToDelivered=asyncHandler(async(req,res)=>{
 
   if(order){
     order.isDelivered=true
-    order.deliveredAt=Date.now()
-    
+    order.deliveredAt=Date.now()  
     const updatedOrder=await order.save()
-
     res.json(updatedOrder)
   }else{
     res.status(404)

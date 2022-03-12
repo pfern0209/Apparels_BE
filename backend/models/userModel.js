@@ -24,6 +24,16 @@ const userSchema=mongoose.Schema({
     type:Boolean,
     required:true,
     default:false
+  },
+  maxProducts:{
+    type:Number,
+    required:true,
+    default:10
+  },
+  productsAdded:{
+    type:Number,
+    required:true,
+    default:0
   }
 },{
   timestamps:true
