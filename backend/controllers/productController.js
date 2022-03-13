@@ -119,15 +119,16 @@ const createProduct=asyncHandler(async(req,res)=>{
 // })
 
 //@desc Update a product
-//@route PUT /api/products/:id
+//@route PUT /api/products/:id/:user/:userId
 //@access Private Admin
 const updateProduct=asyncHandler(async(req,res)=>{
   const {name,price,description,image,brand,category,countInStock}=req.body;
-
   const product =await Product.findById(req.params.id)
+  const user=await User.findById(req.params.userId)
+  const upperLimit=user.maxProducts-user.productsAdded
 
-  if(product){
 
+  if(product && countInStock<=upperLimit){
     product.name=name
     product.price=price
     product.description=description
@@ -135,12 +136,11 @@ const updateProduct=asyncHandler(async(req,res)=>{
     product.brand=brand
     product.category=category
     product.countInStock=countInStock
-
     const updatedProduct=await product.save();
     res.json(updatedProduct)
   }else{
     res.status(404)
-    throw new Error("Product not found")
+    throw new Error("Either product not found or Something wrong with your max limit")
   }
 
 })
@@ -201,7 +201,7 @@ const getSellerCreatedProducts=asyncHandler(async(req,res)=>{
 })
 
 //@desc Get number of products that seller created
-//@route GET /api/products/user/:id/length
+//@route PUT /api/products/user/:id/length
 //@access Private seller
 
 const getProductsAddedNumber=asyncHandler(async(req,res)=>{

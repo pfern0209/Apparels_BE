@@ -118,7 +118,7 @@ const ProductEditScreen = () => {
       category,
       description,
       countInStock
-    }))
+    },userId))
     
   }
 

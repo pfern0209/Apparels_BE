@@ -14,12 +14,13 @@ router.get('/top',getTopProducts)
 router.get('/user/:id',getSellerCreatedProducts)
 // router.route('/user/:id').get(protect,sellerOrAdmin,createProductReview)
 
-router.get('/user/:id/length',getProductsAddedNumber)
+router.put('/user/:id/length',getProductsAddedNumber)
 
-
+router.put('/:id/user/:userId',protect,sellerOrAdmin,updateProduct)
 // router.route('/:id').get(getProductById).delete(protect,admin,deleteProduct).put(protect,admin,updateProduct)
 // router.route('/:id').get(getProductById).delete(protect,admin,deleteProduct).put(protect,sellerOrAdmin,updateProduct)
-router.route('/:id').get(getProductById).delete(protect,admin,deleteProduct).put(protect,sellerOrAdmin,updateProduct)
+router.route('/:id').get(getProductById).delete(protect,admin,deleteProduct)
 // router.route('/:id').get(getProductById).delete(protect,sellerOrAdmin,deleteProduct).put(protect,sellerOrAdmin,updateProduct)
+
 
 export default router
