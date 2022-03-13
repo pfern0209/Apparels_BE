@@ -227,6 +227,32 @@ const updateUser=asyncHandler(async(req,res)=>{
 //   }
 // })
 
+//@desc update seller to false 
+//@route PUT /api/users/reset/:id
+//@access Auto
+const toggleSellerFalse=asyncHandler(async(req,res)=>{
+  const user=await User.findById(req.params.id)
+  const sellerProducts= await Product.find({"user":[req.params.id]})
+  let temp= await User.findById(req.params.id)
+  let updatedProduct= await User.findById(req.params.id)
+
+  if(user && sellerProducts){
+    user.isSeller=false
+    user.productsAdded=false
+    const updatedUser=await user.save();
+    sellerProducts.forEach(async (item) =>{     
+        temp=await Product.findById(item._id)
+        temp.createdInCurrentPlan=false
+        updatedProduct=await temp.save()
+   });
+    res.json(updatedUser)
+
+  }else{
+    res.status(404)
+    throw new Error("User not found")
+  }
+})
+
 
 export {
   authUser,
@@ -236,5 +262,6 @@ export {
   getUsers,
   deleteUser,
   getUserById,
-  updateUser
+  updateUser,
+  toggleSellerFalse
 }

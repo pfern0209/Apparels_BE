@@ -9,6 +9,8 @@ import Message from "../components/Message"
 import Loader from "../components/Loader"
 import { listProducts,deleteProduct,createProduct,sellerProducts } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
+import { toggleSellerFunctionality } from '../actions/userActions'
+import { USER_LOGOUT } from '../constants/userConstants'
 
 const SellerProductListScreen = () => {
   
@@ -41,10 +43,16 @@ const SellerProductListScreen = () => {
     if(!userInfo.isSeller){
         navigate('/login')   
     }
+    if(userInfo.isSeller && upperLimit<=0){
+      dispatch(toggleSellerFunctionality(userInfo._id))
+      dispatch({type: USER_LOGOUT})
+      navigate('/')
+    }
     if(successCreate ){
         navigate(`/admin/product/${createdProduct._id}/edit`)
       }else{
         dispatch(sellerProducts(userInfo._id))
+        
     }
 
   },[userInfo,navigate,dispatch,successCreate])
