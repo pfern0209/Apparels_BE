@@ -1,4 +1,4 @@
-import { ORDER_CREATE_SUCCESS, ORDER_CREATE_REQUEST, ORDER_CREATE_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_DETAILS_FAIL, ORDER_PAY_REQUEST, ORDER_PAY_SUCCESS, ORDER_PAY_FAIL, ORDER_LIST_MY_REQUEST, ORDER_LIST_MY_SUCCESS, ORDER_LIST_MY_FAIL, ORDER_LIST_REQUEST, ORDER_LIST_SUCCESS, ORDER_LIST_FAIL, ORDER_DELIVER_REQUEST, ORDER_DELIVER_SUCCESS, ORDER_DELIVER_FAIL, ORDER_STOCK_UPDATE_REQUEST, ORDER_STOCK_UPDATE_SUCCESS, ORDER_STOCK_UPDATE_FAIL } from "../constants/orderConstants";
+import { ORDER_CREATE_SUCCESS, ORDER_CREATE_REQUEST, ORDER_CREATE_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_DETAILS_FAIL, ORDER_PAY_REQUEST, ORDER_PAY_SUCCESS, ORDER_PAY_FAIL, ORDER_LIST_MY_REQUEST, ORDER_LIST_MY_SUCCESS, ORDER_LIST_MY_FAIL, ORDER_LIST_REQUEST, ORDER_LIST_SUCCESS, ORDER_LIST_FAIL, ORDER_DELIVER_REQUEST, ORDER_DELIVER_SUCCESS, ORDER_DELIVER_FAIL, ORDER_STOCK_UPDATE_REQUEST, ORDER_STOCK_UPDATE_SUCCESS, ORDER_STOCK_UPDATE_FAIL,SUBSCRIPTION_ORDER_REQUEST,SUBSCRIPTION_ORDER_SUCCESS,SUBSCRIPTION_ORDER_FAIL  } from "../constants/orderConstants";
 // import { USER_LOGIN_SUCCESS } from "../constants/userConstants";
 import { logout } from "./userActions";
 import axios from "axios";
@@ -87,16 +87,12 @@ export const payOrder= (orderId,paymentResult)=>async(dispatch,getState)=>{
         Authorization: `Bearer ${userInfo.token}`
       }
     }
-
-    
     const{ data }=await axios.put(`/api/orders/${orderId}/pay`,paymentResult,config)
 
     dispatch({
       type:ORDER_PAY_SUCCESS,
       payload:data
     })
-
-
   }catch(error){
     dispatch({
       type:ORDER_PAY_FAIL,
@@ -277,6 +273,38 @@ export const updateStockAfterOrder= (order)=>async(dispatch,getState)=>{
   }catch(error){
     dispatch({
       type:ORDER_STOCK_UPDATE_FAIL,
+      payload:error.response && error.response.data.message?error.response.data.message:error.message
+    })
+  }
+}
+
+
+
+
+
+export const paySubscriptionOrder= (order,userId)=>async(dispatch,getState)=>{
+  try{
+    dispatch({
+      type:SUBSCRIPTION_ORDER_REQUEST
+    })
+
+    const { userLogin:{ userInfo } }=getState()
+
+    const config={
+      headers:{
+        'Content-Type':'application/json',
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+    const{ data }=await axios.post(`/api/orders/subscription/${userId}`,order,config)
+
+    dispatch({
+      type:SUBSCRIPTION_ORDER_SUCCESS,
+      payload:data
+    })
+  }catch(error){
+    dispatch({
+      type:SUBSCRIPTION_ORDER_FAIL,
       payload:error.response && error.response.data.message?error.response.data.message:error.message
     })
   }

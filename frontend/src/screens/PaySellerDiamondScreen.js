@@ -40,7 +40,7 @@ const PaySellerDiamondScreen = () => {
           </ListGroup.Item>
 
           <ListGroup.Item>
-            Price: 51
+            Price: 100
           </ListGroup.Item>
 
           <ListGroup.Item>
@@ -62,7 +62,7 @@ const PaySellerDiamondScreen = () => {
                   Price:
                 </Col>
                 <Col>
-                  <strong>20</strong>
+                  <strong>100</strong>
                 </Col>
               </Row>
             </ListGroup.Item>
