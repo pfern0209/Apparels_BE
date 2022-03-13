@@ -68,6 +68,11 @@ const productSchema=mongoose.Schema({
     type:Number,
     required:true,
     default:0
+  },
+  createdInCurrentPlan:{
+    type:Boolean,
+    required:true,
+    default:true
   }
 },{
   timestamps:true
