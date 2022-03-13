@@ -211,7 +211,9 @@ const getProductsAddedNumber=asyncHandler(async(req,res)=>{
   if(sellerProducts && user){
     let sellerProductsCount=0
     sellerProducts.forEach(function (item) {
-      sellerProductsCount=sellerProductsCount+item.countInStock 
+      if(item.createdInCurrentPlan===true){       
+        sellerProductsCount=sellerProductsCount+item.countInStock 
+      }
    });
     user.productsAdded=sellerProductsCount
     const updatedUser=await user.save();
