@@ -1,6 +1,6 @@
 import { useState , useEffect } from 'react'
 import {useNavigate} from 'react-router-dom'
-import {Table,Form, Row, Col, Button} from 'react-bootstrap'
+import {Table,Form, Row, Col, Button,ListGroup} from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import {useDispatch, useSelector} from 'react-redux'
 import Message from "../components/Message"
@@ -107,6 +107,31 @@ const ProfileScreen = () => {
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control type='password' placeholder="Confirm Password" value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}></Form.Control>
         </Form.Group>
+
+        {userInfo && 
+        <ListGroup className="mt-2 mb-2" >
+        <ListGroup.Item className="mt-2">
+              <Row>
+                <Col>
+                  Products Added:
+                </Col>
+                <Col>
+                  {userInfo.productsAdded}
+                </Col>
+              </Row>
+            </ListGroup.Item>
+
+            <ListGroup.Item className="mt-2">
+              <Row>
+                <Col>
+                  Products Limit:
+                </Col>
+                <Col>
+                  {userInfo.maxProducts}
+                </Col>
+              </Row>
+            </ListGroup.Item>
+        </ListGroup>}
 
         <Button type='submit' variant='primary'>
           Update

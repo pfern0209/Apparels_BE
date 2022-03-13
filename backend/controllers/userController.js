@@ -238,7 +238,8 @@ const toggleSellerFalse=asyncHandler(async(req,res)=>{
 
   if(user && sellerProducts){
     user.isSeller=false
-    user.productsAdded=false
+    user.productsAdded=0
+    user.maxProducts=0
     const updatedUser=await user.save();
     sellerProducts.forEach(async (item) =>{     
         temp=await Product.findById(item._id)
