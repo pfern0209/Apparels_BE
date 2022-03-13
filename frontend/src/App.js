@@ -18,7 +18,9 @@ import ProductListScreen from './screens/ProductListScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import SellerProductListScreen from './screens/SellerProductListScreen';
-import PaySellerScreen from './screens/PaySellerScreen';
+import PaySellerGoldScreen from './screens/PaySellerGoldScreen';
+import PaySellerDiamondScreen from './screens/PaySellerDiamondScreen';
+import PaySellerPlatinumScreen from './screens/PaySellerPlatinumScreen';
 
 
 
@@ -57,9 +59,21 @@ const App= () => {
         }>  
         </Route>
 
-        <Route exact path="/paySeller" element={
+        <Route exact path="/paySellerGold" element={
           <>
-            <PaySellerScreen/>
+            <PaySellerGoldScreen/>
+          </>
+        }>  
+        </Route>
+        <Route exact path="/paySellerDiamond" element={
+          <>
+            <PaySellerDiamondScreen/>
+          </>
+        }>  
+        </Route>
+        <Route exact path="/paySellerPlatinum" element={
+          <>
+            <PaySellerPlatinumScreen/>
           </>
         }>  
         </Route>

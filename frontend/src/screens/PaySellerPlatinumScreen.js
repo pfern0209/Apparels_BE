@@ -14,7 +14,7 @@ import imagePath from '../images/Subscription.png'
 
 
 
-const PaySellerScreen = () => {
+const PaySellerPlatinumScreen = () => {
 
   const successPaymentHandler=(e)=>{
     console.log("Hello")
@@ -32,7 +32,7 @@ const PaySellerScreen = () => {
       <Col md={3}>
         <ListGroup variant="flush">
           <ListGroup.Item>
-            <h3>Getting Started Plan</h3>
+            <h3>Platinum Plan</h3>
           </ListGroup.Item>
 
           <ListGroup.Item>
@@ -44,7 +44,11 @@ const PaySellerScreen = () => {
           </ListGroup.Item>
 
           <ListGroup.Item>
-            Description: With this plan you can add 1000 products on our platform. Please be sure when you add the products since if you wish to delete or edit the products in case of corrections you will have to contact the admin
+            Limit: 30 products
+          </ListGroup.Item>
+
+          <ListGroup.Item>
+            Description: With this plan you can add 30 products on our platform. Please be sure when you add the products since if you wish to delete or edit the products in case of corrections you will have to contact the admin
           </ListGroup.Item>
         </ListGroup>
       </Col>
@@ -124,4 +128,4 @@ const PaySellerScreen = () => {
   )
 }
 
-export default PaySellerScreen
+export default PaySellerPlatinumScreen

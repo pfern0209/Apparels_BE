@@ -67,9 +67,17 @@ const Header = () => {
           )}  
 
           {userInfo && (!userInfo.isSeller && !userInfo.isAdmin) && (
-            <LinkContainer to="/paySeller">
-            <Nav.Link>Buy Plan</Nav.Link>
-          </LinkContainer>
+            <NavDropdown title="Plan" id="sellerplan">
+            <LinkContainer to="/paySellerGold">
+              <NavDropdown.Item>Gold Plan</NavDropdown.Item>
+            </LinkContainer>
+            <LinkContainer to="/paySellerDiamond">
+            <NavDropdown.Item>Diamond Plan</NavDropdown.Item>
+            </LinkContainer>
+            <LinkContainer to="/paySellerPlatinum">
+            <NavDropdown.Item>Platinum Plan</NavDropdown.Item>
+            </LinkContainer>
+            </NavDropdown>
           )}  
         
         
