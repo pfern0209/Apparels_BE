@@ -1,23 +1,66 @@
 import React from 'react'
 import { useState,useEffect } from "react"
-import { Link,useParams,useNavigate } from "react-router-dom"
+import { Link,useNavigate } from "react-router-dom"
 import { Card,Row,Col,Image,ListGroup,Button, Form,  } from "react-bootstrap"
 import Rating from "../components/Rating"
 import {useDispatch,useSelector} from "react-redux"
-import { listProductDetails, createProductReview } from "../actions/productActions"
+import { paySubscriptionOrder } from "../actions/orderActions"
 import { addToCart } from "../actions/cartActions"
 import Loader from "../components/Loader"
 import Message from "../components/Message"
 import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstants"
 import { PayPalButton } from "react-paypal-button-v2";
+import axios from 'axios'
 import imagePath from '../images/Subscription.png'
+import { USER_LOGOUT } from '../constants/userConstants'
 
 
 
 const PaySellerPlatinumScreen = () => {
 
-  const successPaymentHandler=(e)=>{
-    console.log("Hello")
+  const name="platinum Plan"
+  const price=200
+  const limit=500
+
+
+  const navigate=useNavigate();
+  
+  const dispatch=useDispatch()
+
+  const [sdkReady,setSdkReady]=useState(false)
+
+  const userLogin=useSelector(state=>state.userLogin)
+  const {userInfo}=userLogin
+
+  useEffect(() => {
+    const addPayPalScript=async()=>{
+        if(!userInfo){
+          navigate('/login')
+        }
+
+        const {data:clientId}=await axios.get('/api/config/paypal')
+        const script=document.createElement('script')
+        script.type='text/javascript'
+        script.src=`https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD`
+        script.async=true
+        script.onload=()=>{
+          setSdkReady(true)
+        }
+        document.body.appendChild(script)
+      }
+    
+}, [navigate,userInfo]) 
+
+  const successPaymentHandler=(paymentResult)=>{
+    console.log(paymentResult)
+    console.log(paymentResult.status)
+    if(paymentResult.status==="COMPLETED"){
+      dispatch(paySubscriptionOrder({name:name,limit:limit,price:price,id:paymentResult.id,status:paymentResult.status,update_time:paymentResult.create_time,email_address:paymentResult.payer.email_address,isPaid:true},userInfo._id))
+      dispatch({type: USER_LOGOUT})
+      navigate('/')
+    }else{
+      console.log("something is wrong")
+    }
   }
 
   return (
@@ -40,15 +83,15 @@ const PaySellerPlatinumScreen = () => {
           </ListGroup.Item>
 
           <ListGroup.Item>
-            Price: 200
+            Price: {price}
           </ListGroup.Item>
 
           <ListGroup.Item>
-            Limit: 30 products
+            Limit: {limit} products
           </ListGroup.Item>
 
           <ListGroup.Item>
-            Description: With this plan you can add 30 products on our platform. Please be sure when you add the products since if you wish to delete or edit the products in case of corrections you will have to contact the admin
+            Description: With this plan you can add 500 products on our platform. Please be sure when you add the products since if you wish to delete or edit the products in case of corrections you will have to contact the admin
           </ListGroup.Item>
         </ListGroup>
       </Col>
@@ -62,7 +105,7 @@ const PaySellerPlatinumScreen = () => {
                   Price:
                 </Col>
                 <Col>
-                  <strong>200</strong>
+                  <strong>{price}</strong>
                 </Col>
               </Row>
             </ListGroup.Item>
@@ -82,7 +125,7 @@ const PaySellerPlatinumScreen = () => {
 
 
             <ListGroup.Item>
-            <PayPalButton currency="USD" amount="50" onSuccess={successPaymentHandler}/>
+            <PayPalButton currency="USD" amount={price} onSuccess={successPaymentHandler}/>
             </ListGroup.Item>
           </ListGroup>
         </Card>
@@ -127,5 +170,6 @@ const PaySellerPlatinumScreen = () => {
     </>
   )
 }
+
 
 export default PaySellerPlatinumScreen

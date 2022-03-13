@@ -21,7 +21,7 @@ const PaySellerGoldScreen = () => {
 
   const name="goldPlan"
   const price=50
-  const limit=10
+  const limit=100
 
 
   const navigate=useNavigate();
@@ -93,7 +93,7 @@ const PaySellerGoldScreen = () => {
           </ListGroup.Item>
 
           <ListGroup.Item>
-            Description: With this plan you can add 10 products on our platform. Please be sure when you add the products since if you wish to delete or edit the products in case of corrections you will have to contact the admin
+            Description: With this plan you can add 100 products on our platform. Please be sure when you add the products since if you wish to delete or edit the products in case of corrections you will have to contact the admin
           </ListGroup.Item>
         </ListGroup>
       </Col>
@@ -127,7 +127,7 @@ const PaySellerGoldScreen = () => {
 
 
             <ListGroup.Item>
-            <PayPalButton currency="USD" amount="50" onSuccess={successPaymentHandler}/>
+            <PayPalButton currency="USD" amount={price} onSuccess={successPaymentHandler}/>
             </ListGroup.Item>
           </ListGroup>
         </Card>
