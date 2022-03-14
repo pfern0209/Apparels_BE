@@ -128,7 +128,7 @@ const updateProduct=asyncHandler(async(req,res)=>{
   const upperLimit=user.maxProducts-user.productsAdded
 
 
-  if(product && countInStock<=upperLimit){
+  if(product && (countInStock<=upperLimit || user.isAdmin===true)){
     product.name=name
     product.price=price
     product.description=description
